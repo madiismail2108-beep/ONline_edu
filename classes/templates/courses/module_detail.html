@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}{{ module.title }}{% endblock %}
+
+{% block content %}
+<h2>{{ module.title }}</h2>
+<p>{{ module.description }}</p>
+
+<hr>
+
+<h4>Lessons</h4>
+
+<ul class="list-group">
+    {% for lesson in module.lessons.all %}
+        <li class="list-group-item d-flex justify-content-between">
+            {{ lesson.title }}
+            <a href="{% url 'lesson_detail' lesson.id %}" class="btn btn-sm btn-outline-primary">
+                Open
+            </a>
+        </li>
+    {% empty %}
+        <li class="list-group-item">No lessons</li>
+    {% endfor %}
+</ul>
+
+{% if user.is_staff %}
+    <a href="{% url 'create_lesson' module.id %}" class="btn btn-success mt-3">
+        ➕ Add Lesson
+    </a>
+{% endif %}
+{% endblock %}
