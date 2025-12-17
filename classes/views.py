@@ -1,6 +1,68 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.http import HttpResponseForbidden
-from .models import Course, Module, Lesson
+from .models import Course, Module, Lesson, Topic
+from django.contrib.auth import logout
+from .forms import TopicForm
+
+def topic_list(request, course_id):
+    course = get_object_or_404(Course, id=course_id)
+    topics = Topic.objects.filter(lesson__module__course=course).order_by('order')
+
+    return render(request, 'courses/classes/topic_list.html', {
+        'course': course,
+        'topics': topics
+    })
+
+def topic_detail(request, pk):
+    topic = get_object_or_404(Topic, pk=pk)
+    
+    return render(request, 'courses/classes/topic_detail.html', {
+        'topic': topic
+    })
+
+def topic_create(request):
+    if request.method == 'POST':
+        form = TopicForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('course_list')
+    else:
+        form = TopicForm()
+
+    return render(request, 'courses/classes/topic_form.html', {
+        'form': form
+    })
+
+def topic_update(request, pk):
+    topic = get_object_or_404(Topic, pk=pk)
+
+    if request.method == 'POST':
+        form = TopicForm(request.POST, instance=topic)
+        if form.is_valid():
+            form.save()
+            return redirect('topic_detail', pk=topic.pk)
+    else:
+        form = TopicForm(instance=topic)
+
+    return render(request, 'courses/classes/topic_form.html', {
+        'form': form,
+        'topic': topic
+    })
+
+def topic_delete(request, pk):
+    topic = get_object_or_404(Topic, pk=pk)
+
+    if request.method == 'POST':
+        topic.delete()
+        return redirect('course_list')
+
+    return render(request, 'courses/classes/topic_confirm_delete.html', {
+        'topic': topic
+    })
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
 
 def course_detail(request, pk):
     course = get_object_or_404(Course, pk=pk)

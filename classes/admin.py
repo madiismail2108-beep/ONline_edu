@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
-from .models import Course, Module, Lesson
+from .models import Course, Module, Lesson, Topic
 
 admin.site.unregister(User)
 
@@ -34,3 +34,12 @@ class ModuleAdmin(admin.ModelAdmin):
 class LessonAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'module')
     search_fields = ('title',)
+
+@admin.register(Topic)
+class TopicAdmin(admin.ModelAdmin):
+    list_display = ('id', 'lesson', 'title')
+    search_fields = ('lesson',)
+
+class TopicInline(admin.TabularInline):
+    model = Topic
+    extra = 1
