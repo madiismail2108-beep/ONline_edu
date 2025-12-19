@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import topic_list, topic_detail, topic_create, topic_update, topic_delete
+from .views import topic_list, topic_detail, topic_create, topic_update, topic_delete, activate
 
 urlpatterns = [
     path('', views.course_list, name='course_list'),
@@ -21,4 +21,6 @@ urlpatterns = [
     path('topic/add/', topic_create, name='topic_add'),
     path('topic/<int:pk>/edit/', topic_update, name='topic_edit'),
     path('topic/<int:pk>/delete/', topic_delete, name='topic_delete'),
+
+    path('activate/<uidb64>/<token>/', activate, name='activate'),
 ]

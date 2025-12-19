@@ -35,3 +35,12 @@ class Topic(models.Model):
 
     def __str__(self):
         return self.title
+
+class User(models.Model):
+    username = models.CharField(max_length=50, unique=True)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=100)
+    is_active = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.username
