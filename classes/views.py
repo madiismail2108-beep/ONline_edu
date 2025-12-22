@@ -164,19 +164,22 @@ def create_lesson(request, module_id):
     return render(request, "courses/add/create_lesson.html", {"module": module})
 
 def register(request):
-    if request.method == "POST":
+    if request.method == 'POST':
+        username = request.POST['username']
         email = request.POST['email']
         password = request.POST['password']
 
         user = User.objects.create_user(
+            username=username,
             email=email,
-            password=password,
-            is_active=False
+            password=password
         )
+        user.is_active = False
+        user.save()
 
         current_site = get_current_site(request)
         mail_subject = 'Activate your account'
-        message = render_to_string('registration/activation_email.html', {
+        message = render_to_string('accounts/activation_email.html', {
             'user': user,
             'domain': current_site.domain,
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -189,14 +192,10 @@ def register(request):
             to=[email]
         )
         email.send()
-        messages.success(
-            request,
-            'Your account has been created! Please confirm your email to complete the registration.'
-        )
 
-        return redirect('login')
+        return render(request, 'accounts/check_email.html')
 
-    return render(request, 'registration/register.html')
+    return render(request, 'accounts/register.html')
 
 
 def activate(request, uidb64, token):
