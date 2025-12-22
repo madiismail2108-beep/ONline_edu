@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load socialaccount %}
 
 {% block title %}Login{% endblock %}
 
@@ -7,21 +8,39 @@
     <div class="col-md-4">
         <h2 class="mb-3 text-center">Login</h2>
 
+        <!-- 🔐 Oddiy login (allauth form) -->
         <form method="post">
             {% csrf_token %}
-
-            <div class="mb-3">
-                <label>Username</label>
-                <input type="text" name="username" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label>Password</label>
-                <input type="password" name="password" class="form-control" required>
-            </div>
-
-            <button class="btn btn-primary w-100">Login</button>
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary w-100">
+                Login
+            </button>
         </form>
+
+        <hr>
+
+        <!-- 🌐 Social login -->
+        <div class="text-center">
+            <a class="btn btn-danger w-100 mb-2"
+               href="{% provider_login_url 'google' %}">
+                Google bilan kirish
+            </a>
+
+            <a class="btn btn-dark w-100 mb-2"
+               href="{% provider_login_url 'github' %}">
+                GitHub bilan kirish
+            </a>
+
+            <a class="btn btn-primary w-100 mb-2"
+               href="{% provider_login_url 'facebook' %}">
+                Facebook bilan kirish
+            </a>
+
+            <a class="btn btn-info w-100"
+               href="{% provider_login_url 'twitter' %}">
+                Twitter bilan kirish
+            </a>
+        </div>
     </div>
 </div>
 {% endblock %}
