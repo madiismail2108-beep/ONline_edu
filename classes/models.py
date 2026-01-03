@@ -19,6 +19,7 @@ class Lesson(models.Model):
     module = models.ForeignKey(Module, related_name='lessons', on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     content = models.TextField()
+    video_url = models.URLField(blank=True, null=True)
 
     def __str__(self):
         return self.title

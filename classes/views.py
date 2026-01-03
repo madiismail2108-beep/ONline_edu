@@ -152,11 +152,15 @@ def create_lesson(request, module_id):
     if request.method == "POST":
         title = request.POST.get("title")
         content = request.POST.get("content")
+        video_url = request.POST.get("video_url")
+
+
 
         Lesson.objects.create(
             module=module,
             title=title,
-            content=content
+            content=content,
+            video_url=video_url
         )
 
         return redirect("module_detail", pk=module_id)
